@@ -33,15 +33,6 @@ xmin = 0;
 % Sigmoid Beverton-Holt
 delta = 7;
 g = R*y.^(delta)./(1+(K^(delta-1)*R-1)/K^delta*y.^(delta));
-% g = R*y.^2./(1+(R-1)*y.^2);
-% xmin = 1/(2*(R*K-1)/K^2)*(R-sqrt(R^2-4*(R*K-1)/K^2))
-% minimum population size
-%fun = @(t) t-R*t^(delta)./(1+(K^(delta-1)*R-1)/K^delta*t^(delta)); % function
-%x0 = [0.1 K-0.1]; % initial interval
-% xminA = fzero(fun,x0)
-% left
-% leftv = find(x<xmin);
-% leftp = max(leftv+1);
 xK = find(x<K);
 xKpoint = max(xK+1);
 % simpsons(g(1:xKpoint)-x(1:xKpoint),0,K);
@@ -65,8 +56,6 @@ dispersal = zeros(N,N);
 p = zeros( 1, N);
 temp    = find(4.5<=x & x<=5.5);
 p(temp) = ones(size(p(temp)));
-% temp = find(xmin <=x & x <= xmax);
-% p(temp) = 1/(xmax-xmin)*ones(size(p(temp)));
 
 % Growth phase
 tic;
@@ -89,13 +78,8 @@ for j=1:T
     end
     % Compute the expected dispersal at density z
     Ez = simpsons(s.*phat,0,2*xmax);
-    % xEz = find(x<Ez);
-    % xEzpoint = max(xEz+1);
     % Dispersal phase
-    % d = y+Ez;
-    % d = phat;
     d = max(y,Ez);
-    % d = Ez*(K+exp(-(y-Ez)/gamma)./(gamma*(1+exp(-(y-Ez)/gamma)).^2)); 
     fract = simpsons(phat,0,2*xmax);
     if fract > 1
         phat = phat/fract;
@@ -104,33 +88,10 @@ for j=1:T
     for i=1:N
         % Gaussian dispersal
         Kd(i,1:N) = exp(-(x(i)-d).^2/(2*sigma_d^2))/sqrt(2*pi*sigma_d^2);
-        dispersal(i,1:N) = Kd(i,1:N).*phat;
-        
-        % Uniform dispersal with mean Ez
-%         if x(i) < 2*Ez
-%             dispersal(i,1:N) = 1/(2*Ez)*phat;
-%         else
-%             dispersal(i,1:N) = 0;
-%         end
-        
+        dispersal(i,1:N) = Kd(i,1:N).*phat; 
         % Laplce recolonization
         p(i) = simpsons(dispersal(i,1:N),0,2*xmax)...
             + (1-fract)*simpsons(1/(2*lambda)*exp(-(abs(x(i)-y))/lambda).*phat,0,2*xmax);
-        
-        % No recolonization
-        % p(i) = simpsons(dispersal(i,1:N),0,2*xmax);
-        % Uniform recolonization
-%         if x(i) < K
-%             p(i) = simpsons(dispersal(i,1:N),0,2*xmax) + (1-fract)*simpsons(1/(K)*phat,0,2*xmax);
-%         else
-%             p(i) = simpsons(dispersal(i,1:N),0,2*xmax);
-%         end
-        
-        if p(i) < 0.0001
-            p(i)=0;
-        end
-        %o(i) = simpsons(dispersal(i,1:N),0,2*xmax);
-        %oo(i) = simpsons(1/(2*lambda)*exp(-(abs(x(i)-y))/lambda).*phat,0,2*xmax);
     end
     total = simpsons(p,0,2*xmax);
     if total>1
@@ -149,7 +110,4 @@ for j=1:T
     %simpsons(P(j+1,1:N),0,2*xmax)
     simpsons(p,0,2*xmax)
 end
-% plot(x,P(T+1,1:N));
-% axis([xmin-1 xmax+1 ymin ymax]);
-% trapz(x,P(T+1,1:N))
 toc;
