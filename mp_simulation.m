@@ -9,7 +9,7 @@ N = 2^10;
 % create the discretization for the population density x
 x = linspace(0,2*xmax,N);
 %Number of generations
-T = 100;
+T = 1000;
 % right
 rightv = find(x>xmax);
 rightp = min(rightv-1);
