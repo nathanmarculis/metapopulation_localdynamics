@@ -1,6 +1,6 @@
 %%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% 
-%%%%% Growth Functions:
+%%%%% Reproduction Functions:
 %%%%% 
 %%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -20,16 +20,6 @@
 %%% Plot variables:
  N_plot  = [0.0 : 0.05 : K1];
  FN1_plot = N_plot .* exp(R1 * (1 - (N_plot/K1)));
-
-
-%%%%% BH Allee Effect;
-% % Growth parameters:
-%  R     = 3;
-%  K     = 1.0;
-%  s     = 5;
-%%%% Plot variables:
-%  N_plot  = [0.0 : 0.05 : 1.5 * K];
-%  FN_plot = (R * N_plot) ./ (1 + ((R - 1)/K)*N_plot) .* (s * N_plot) ./ (1 + s*N_plot);
  
  %%%%% Sigmoid Beverton-Holt;
 % Growth parameters:
@@ -39,17 +29,6 @@
 % % %%% Plot variables:
   N_plot  = [0.0 : 0.05 : K2];
   FN2_plot = (R2 * N_plot.^(delta)) ./ (1 + (K2^(delta-1)*R2-1)/(K2^(delta))*N_plot.^(delta));
- 
- 
- %%%%% Allee Effect with overcompensation;
-% Growth parameters:
-%  R   = 3;              % intrinsic growth rate
-%  K   = 1;              % carrying capacity of the population in absense of the positive density dependence
-%  m   = 10;             % predation intensity 
-%  s   = 16;             % propotional to the handling time
-%%% Plot variables:
-%  N_plot  = [0.0 : 0.05 : 1];
-%  FN_plot = N_plot .* exp(R*(1 - N_plot / K) - m./(1 + s * N_plot));
 
 %%%%% Plot the growth function:
 % subplot(2,1,1);
