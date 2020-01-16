@@ -54,7 +54,7 @@ dispersal = zeros(N,N);
 
 % Initial condition
 p = zeros( 1, N);
-temp    = find(4.5<=x & x<=5.5);
+temp    = find(1<=x & x<=2);
 p(temp) = ones(size(p(temp)));
 
 % Growth phase
